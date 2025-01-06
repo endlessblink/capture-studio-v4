@@ -11,5 +11,6 @@
         <file alias="timer.svg">icons/timer.svg</file>
         <file alias="record.svg">icons/record.svg</file>
         <file alias="stop.svg">icons/stop.svg</file>
+        <file alias="close.svg">icons/close.svg</file>
     </qresource>
 </RCC> 

@@ -84,15 +84,7 @@ Window {
             // Display/Screen selection
             ToolButton {
                 icon.source: "qrc:/icons/display.svg"
-                icon.color: isDisplayMode ? "#00A0FF" : "#808080"
-                icon.width: 24
-                icon.height: 24
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: parent.hovered ? "#A0A0A0" : "transparent"
-                    border.width: 1
-                    radius: 4
-                }
+                icon.color: isDisplayMode ? "#00A0FF" : "white"
                 enabled: !isRecording
                 onClicked: {
                     isDisplayMode = true
@@ -106,15 +98,7 @@ Window {
             // Window selection
             ToolButton {
                 icon.source: "qrc:/icons/window.svg"
-                icon.color: isWindowMode ? "#00A0FF" : "#808080"
-                icon.width: 24
-                icon.height: 24
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: parent.hovered ? "#A0A0A0" : "transparent"
-                    border.width: 1
-                    radius: 4
-                }
+                icon.color: isWindowMode ? "#00A0FF" : "white"
                 enabled: !isRecording
                 onClicked: {
                     isDisplayMode = false
@@ -128,15 +112,7 @@ Window {
             // Area selection
             ToolButton {
                 icon.source: "qrc:/icons/area.svg"
-                icon.color: isAreaMode ? "#00A0FF" : "#808080"
-                icon.width: 24
-                icon.height: 24
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: parent.hovered ? "#A0A0A0" : "transparent"
-                    border.width: 1
-                    radius: 4
-                }
+                icon.color: isAreaMode ? "#00A0FF" : "white"
                 enabled: !isRecording
                 onClicked: {
                     isDisplayMode = false
@@ -150,15 +126,7 @@ Window {
             // Device selection
             ToolButton {
                 icon.source: "qrc:/icons/device.svg"
-                icon.color: isDeviceMode ? "#00A0FF" : "#808080"
-                icon.width: 24
-                icon.height: 24
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: parent.hovered ? "#A0A0A0" : "transparent"
-                    border.width: 1
-                    radius: 4
-                }
+                icon.color: isDeviceMode ? "#00A0FF" : "white"
                 enabled: !isRecording
                 onClicked: {
                     isDisplayMode = false
@@ -181,14 +149,6 @@ Window {
                 id: recordButton
                 icon.source: isRecording ? "qrc:/icons/stop.svg" : "qrc:/icons/record.svg"
                 icon.color: isRecording ? "#FF4444" : "#44FF44"
-                icon.width: 24
-                icon.height: 24
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: parent.hovered ? "#A0A0A0" : "transparent"
-                    border.width: 1
-                    radius: 4
-                }
                 onClicked: recordingToggled(!isRecording)
             }
 
@@ -202,15 +162,7 @@ Window {
             // Camera toggle
             ToolButton {
                 icon.source: "qrc:/icons/camera.svg"
-                icon.color: isCameraEnabled ? "#00A0FF" : "#808080"
-                icon.width: 24
-                icon.height: 24
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: parent.hovered ? "#A0A0A0" : "transparent"
-                    border.width: 1
-                    radius: 4
-                }
+                icon.color: isCameraEnabled ? "#00A0FF" : "white"
                 enabled: false
                 onClicked: {
                     isCameraEnabled = !isCameraEnabled
@@ -221,15 +173,7 @@ Window {
             // Microphone toggle
             ToolButton {
                 icon.source: "qrc:/icons/microphone.svg"
-                icon.color: isMicrophoneEnabled ? "#00A0FF" : "#808080"
-                icon.width: 24
-                icon.height: 24
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: parent.hovered ? "#A0A0A0" : "transparent"
-                    border.width: 1
-                    radius: 4
-                }
+                icon.color: isMicrophoneEnabled ? "#00A0FF" : "white"
                 enabled: false
                 onClicked: {
                     isMicrophoneEnabled = !isMicrophoneEnabled
@@ -240,15 +184,7 @@ Window {
             // System audio toggle
             ToolButton {
                 icon.source: "qrc:/icons/audio.svg"
-                icon.color: isSystemAudioEnabled ? "#00A0FF" : "#808080"
-                icon.width: 24
-                icon.height: 24
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: parent.hovered ? "#A0A0A0" : "transparent"
-                    border.width: 1
-                    radius: 4
-                }
+                icon.color: isSystemAudioEnabled ? "#00A0FF" : "white"
                 enabled: false
                 onClicked: {
                     isSystemAudioEnabled = !isSystemAudioEnabled
@@ -266,17 +202,16 @@ Window {
             // Settings menu
             ToolButton {
                 icon.source: "qrc:/icons/timer.svg"
-                icon.color: "#808080"
-                icon.width: 24
-                icon.height: 24
-                background: Rectangle {
-                    color: "transparent"
-                    border.color: parent.hovered ? "#A0A0A0" : "transparent"
-                    border.width: 1
-                    radius: 4
-                }
+                icon.color: "white"
                 enabled: !isRecording
                 onClicked: settingsClicked()
+            }
+
+            // Exit button
+            ToolButton {
+                icon.source: "qrc:/icons/close.svg"
+                icon.color: "white"
+                onClicked: Qt.quit()
             }
         }
     }
