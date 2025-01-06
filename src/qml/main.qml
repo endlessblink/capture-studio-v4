@@ -32,8 +32,12 @@ ApplicationWindow {
             if (mode === "area") {
                 var selector = areaSelector.createObject(null)
                 selector.show()
+            } else if (mode === "window") {
+                var windowSelector = windowSelectorComponent.createObject(null)
+                windowSelector.show()
             } else if (mode === "display") {
                 captureManager.set_capture_area(null)
+                captureManager.set_selected_window(null)
             }
         }
         
@@ -60,6 +64,20 @@ ApplicationWindow {
             }
             onSelectionCancelled: {
                 captureManager.set_capture_area(null)
+            }
+        }
+    }
+    
+    // Window selector component
+    Component {
+        id: windowSelectorComponent
+        
+        WindowSelector {
+            onWindowSelected: function(windowInfo) {
+                captureManager.set_selected_window(windowInfo)
+            }
+            onSelectionCancelled: {
+                captureManager.set_selected_window(null)
             }
         }
     }

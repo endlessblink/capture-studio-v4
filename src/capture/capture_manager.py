@@ -1,5 +1,5 @@
-from PySide6.QtCore import QObject, Signal, Slot, Property, QRect
-from PySide6.QtGui import QScreen, QGuiApplication, QPixmap, QImage
+from PySide6.QtCore import QObject, Signal, Slot, Property, QRect, QPoint
+from PySide6.QtGui import QScreen, QGuiApplication, QPixmap, QImage, QWindow
 import numpy as np
 import cv2
 from pathlib import Path
@@ -8,19 +8,26 @@ from loguru import logger
 import platform
 import os
 import ctypes
+from typing import List, Dict
+
+WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
 class CaptureManager(QObject):
     recordingChanged = Signal(bool)
     captureComplete = Signal(str)  # Emits path to captured file
     errorOccurred = Signal(str)
+    availableWindowsChanged = Signal()
     
     def __init__(self, parent=None):
         super().__init__(parent)
         self._recording = False
         self._video_writer = None
         self._capture_area = None
+        self._selected_window = None
         self._fps = 30
         self._output_path = None
+        self._available_windows = []
+        self._update_window_list()
         logger.info("CaptureManager initialized")
         
     @Property(bool, notify=recordingChanged)
@@ -28,18 +35,75 @@ class CaptureManager(QObject):
         logger.debug(f"Recording property accessed, value: {self._recording}")
         return self._recording
         
+    @Property('QVariantList', notify=availableWindowsChanged)
+    def availableWindows(self):
+        return self._available_windows
+        
+    def _update_window_list(self):
+        """Update the list of available windows."""
+        if platform.system() == 'Windows':
+            self._available_windows = []
+            
+            def callback(hwnd, _):
+                if ctypes.windll.user32.IsWindowVisible(hwnd):
+                    length = ctypes.windll.user32.GetWindowTextLengthW(hwnd)
+                    if length > 0:
+                        title = ctypes.create_unicode_buffer(length + 1)
+                        ctypes.windll.user32.GetWindowTextW(hwnd, title, length + 1)
+                        rect = ctypes.wintypes.RECT()
+                        if ctypes.windll.user32.GetWindowRect(hwnd, ctypes.byref(rect)):
+                            self._available_windows.append({
+                                'handle': hwnd,
+                                'title': title.value,
+                                'rect': QRect(rect.left, rect.top, 
+                                            rect.right - rect.left,
+                                            rect.bottom - rect.top)
+                            })
+                return True
+
+            enum_windows = ctypes.windll.user32.EnumWindows
+            enum_windows(WNDENUMPROC(callback), 0)
+            
+            self.availableWindowsChanged.emit()
+        
     @Slot('QVariant')
     def set_capture_area(self, area):
         """Set the area to capture. If None or invalid, captures full screen."""
         if area and isinstance(area, QRect) and area.isValid():
             self._capture_area = area
+            self._selected_window = None
         else:
             self._capture_area = None
+            self._selected_window = None
         logger.info(f"Capture area set to: {self._capture_area}")
+        
+    @Slot('QVariant')
+    def set_selected_window(self, window_info):
+        """Set the window to capture."""
+        if window_info and isinstance(window_info, dict):
+            self._selected_window = window_info
+            self._capture_area = window_info['rect']
+        else:
+            self._selected_window = None
+            self._capture_area = None
+        logger.info(f"Selected window set to: {self._selected_window}")
         
     def _grab_screen(self) -> QPixmap:
         """Capture the current screen or selected area."""
         screen = QGuiApplication.primaryScreen()
+        if self._selected_window:
+            # Update window position in case it moved
+            rect = ctypes.wintypes.RECT()
+            if ctypes.windll.user32.GetWindowRect(
+                self._selected_window['handle'],
+                ctypes.byref(rect)
+            ):
+                self._capture_area = QRect(
+                    rect.left, rect.top,
+                    rect.right - rect.left,
+                    rect.bottom - rect.top
+                )
+        
         if self._capture_area and self._capture_area.isValid():
             return screen.grabWindow(0, self._capture_area.x(), 
                                    self._capture_area.y(),
