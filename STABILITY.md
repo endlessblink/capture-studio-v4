@@ -1,0 +1,144 @@
+# CaptureStudio Development Rules
+
+## Project Structure
+- Use PySide6/PyQt6 for the GUI framework
+- Implement modular architecture with clear separation of concerns
+- Follow Model-View-ViewModel (MVVM) pattern
+- Use QML for UI design with Python backend
+- Implement unit tests for core functionality
+
+## Development Phases
+
+### Phase 1: Project Setup and Basic UI
+- Set up Python virtual environment
+- Install PySide6/PyQt6 and dependencies
+- Create basic application structure
+- Design and implement main window UI
+- Implement window management and system tray integration
+
+### Phase 2: Screen Capture Implementation
+- Implement screen capture using Qt native methods
+- Add multi-monitor support
+- Implement region selection
+- Add window selection capability
+- Implement cursor capture options
+
+### Phase 3: Camera Capture Implementation
+- Implement camera device detection
+- Add camera preview functionality
+- Implement camera capture using QtMultimedia
+- Add camera settings and controls
+- Implement device switching
+
+### Phase 4: Audio Capture
+- Implement audio device detection
+- Add audio input selection
+- Implement audio capture
+- Add volume controls and monitoring
+- Implement audio device switching
+
+### Phase 5: Recording and Processing
+- Implement GStreamer pipeline for video processing
+- Add recording controls
+- Implement different output formats
+- Add quality settings
+- Implement hardware acceleration
+
+### Phase 6: Advanced Features
+- Add scene system
+- Implement layouts and presets
+- Add effects and filters
+- Implement hotkeys
+- Add streaming capabilities
+
+### Phase 7: Polish and Optimization
+- Optimize performance
+- Add error handling
+- Implement auto-update system
+- Add usage analytics
+- Polish UI and UX
+
+## Code Style Rules
+- Follow PEP 8 guidelines
+- Use type hints
+- Document all public APIs
+- Keep functions focused and small
+- Use meaningful variable names
+
+## Testing Rules
+- Write unit tests for core functionality
+- Add integration tests for UI
+- Test on multiple platforms
+- Include performance testing
+- Add automated CI/CD
+
+## UI/UX Rules
+- Use modern, flat design
+- Implement dark and light themes
+- Support high DPI displays
+- Make UI responsive
+- Follow platform-specific guidelines
+
+## Performance Rules
+- Minimize CPU usage when idle
+- Optimize memory usage
+- Use hardware acceleration when available
+- Implement efficient data structures
+- Profile and optimize bottlenecks
+
+## Error Handling Rules
+- Implement comprehensive error handling
+- Add logging system
+- Create user-friendly error messages
+- Add crash reporting
+- Implement auto-recovery
+
+## Documentation Rules
+- Document setup process
+- Create user documentation
+- Add developer documentation
+- Include API documentation
+- Document known issues
+
+## Release Rules
+- Use semantic versioning
+- Create release notes
+- Test installers
+- Include update mechanism
+- Sign releases
+
+## Stability Principles
+
+### QML Structure Rules
+- Use basic Window/Rectangle structure for root elements
+- Avoid Material Design and QtGraphicalEffects
+- Use standard Qt Quick Controls without Material theme
+- Keep window management simple with Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool
+
+### Required QML Imports
+```qml
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Window
+import "."  // Local components
+```
+
+### Resource Management
+- Use qrc:/ prefix for all resources
+- Keep resources in src/resources directory
+- Always import resources_rc in Python main file
+- Use proper resource paths in QML: "qrc:/icons/example.svg"
+
+### Project Structure
+- QML files in src/qml/
+- Components in src/qml/components/
+- Resources in src/resources/
+- Python modules in src/
+- Keep resource.qrc at root level
+
+### Effects and Animations
+- Use Qt's built-in transformation system (QTransform)
+- Implement custom effects using QML's basic animation system
+- Use ShaderEffect for advanced visual effects
+- Avoid third-party effect libraries 
