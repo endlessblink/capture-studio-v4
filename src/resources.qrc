@@ -1,0 +1,15 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/icons">
+        <file alias="display.svg">icons/display.svg</file>
+        <file alias="window.svg">icons/window.svg</file>
+        <file alias="area.svg">icons/area.svg</file>
+        <file alias="device.svg">icons/device.svg</file>
+        <file alias="camera.svg">icons/camera.svg</file>
+        <file alias="microphone.svg">icons/microphone.svg</file>
+        <file alias="audio.svg">icons/audio.svg</file>
+        <file alias="timer.svg">icons/timer.svg</file>
+        <file alias="record.svg">icons/record.svg</file>
+        <file alias="stop.svg">icons/stop.svg</file>
+    </qresource>
+</RCC> 

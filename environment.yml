@@ -1,0 +1,20 @@
+name: capturestudio
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pyside6>=6.5.0
+  - pygobject>=3.44.0
+  - gstreamer>=1.22.0
+  - gst-plugins-base>=1.22.0
+  - gst-plugins-good>=1.22.0
+  - pip:
+    - typing-extensions>=4.7.0
+    - python-dotenv>=1.0.0
+    - loguru>=0.7.0
+    - pytest>=7.4.0
+    - pytest-qt>=4.2.0
+    - black>=23.7.0
+    - mypy>=1.4.0 

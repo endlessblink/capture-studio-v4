@@ -1,0 +1,9 @@
+PySide6>=6.5.0
+PyGObject>=3.44.0  # For GStreamer integration
+typing-extensions>=4.7.0
+python-dotenv>=1.0.0
+loguru>=0.7.0  # For better logging
+pytest>=7.4.0  # For testing
+pytest-qt>=4.2.0  # For Qt-specific testing
+black>=23.7.0  # For code formatting
+mypy>=1.4.0  # For type checking 

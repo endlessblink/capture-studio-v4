@@ -1,0 +1,158 @@
+import QtQuick
+import QtQuick.Controls.Basic
+import QtQuick.Layouts
+import QtQuick.Window
+import Qt.labs.platform as Platform
+import "components"
+
+ApplicationWindow {
+    id: mainWindow
+    visible: false
+    width: 1
+    height: 1
+    title: qsTr("CaptureStudio")
+    color: "transparent"
+    flags: Qt.FramelessWindowHint | Qt.Tool
+    
+    // Properties
+    property bool isRecording: captureManager.recording
+    
+    // Floating toolbar
+    FloatingToolbar {
+        id: toolbar
+        visible: true
+        isRecording: mainWindow.isRecording
+        
+        Component.onCompleted: {
+            // Position the toolbar in the center of the screen
+            var screen = Qt.application.screens[0]
+            x = (screen.width - width) / 2
+            y = screen.height - height - 100
+            show()
+        }
+        
+        onModeChanged: function(mode) {
+            console.log("Mode changed:", mode)
+            if (mode === "area") {
+                var selector = areaSelector.createObject(mainWindow, {
+                    "screen": Qt.application.screens[0]
+                })
+                selector.areaSelected.connect(function(area) {
+                    captureManager.set_capture_area(area)
+                    selector.destroy()
+                })
+                selector.selectionCancelled.connect(function() {
+                    captureManager.set_capture_area(null)
+                    selector.destroy()
+                })
+                selector.show()
+            } else if (mode === "window") {
+                windowSelector.show()
+            } else if (mode === "display") {
+                captureManager.set_capture_area(null)
+            }
+        }
+        
+        onRecordingToggled: function(start) {
+            console.log("Recording toggled:", start)
+            if (start) {
+                captureManager.start_recording(null)
+            } else {
+                captureManager.stop_recording()
+            }
+        }
+        
+        onCameraToggled: function(enabled) {
+            // To be implemented
+        }
+        
+        onMicrophoneToggled: function(enabled) {
+            // To be implemented
+        }
+        
+        onSystemAudioToggled: function(enabled) {
+            // To be implemented
+        }
+        
+        onSettingsClicked: {
+            settingsDialog.visible = true
+        }
+    }
+    
+    // Area selector component
+    Component {
+        id: areaSelector
+        AreaSelector { }
+    }
+    
+    // Window selector
+    WindowSelector {
+        id: windowSelector
+        visible: false
+        
+        onWindowSelected: function(handle) {
+            captureManager.select_window(handle)
+            previewWindow.show()
+        }
+    }
+    
+    // Preview window
+    PreviewWindow {
+        id: previewWindow
+        visible: false
+        isRecording: mainWindow.isRecording
+    }
+    
+    // Settings dialog
+    Window {
+        id: settingsDialog
+        title: qsTr("Settings")
+        width: 400
+        height: 300
+        x: mainWindow.x + (mainWindow.width - width) / 2
+        y: mainWindow.y + (mainWindow.height - height) / 2
+        visible: false
+        flags: Qt.Dialog | Qt.WindowStaysOnTopHint
+        color: "#1E1E1E"
+        
+        Rectangle {
+            anchors.fill: parent
+            color: "#2C2C2C"
+            
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 20
+                spacing: 20
+                
+                Text {
+                    text: qsTr("Settings will be implemented soon")
+                    color: "white"
+                    Layout.alignment: Qt.AlignCenter
+                }
+                
+                Button {
+                    text: qsTr("Close")
+                    Layout.alignment: Qt.AlignRight
+                    
+                    background: Rectangle {
+                        implicitWidth: 80
+                        implicitHeight: 30
+                        color: parent.down ? "#404040" : (parent.hovered ? "#363636" : "#2C2C2C")
+                        radius: 4
+                        border.color: "#404040"
+                        border.width: 1
+                    }
+                    
+                    contentItem: Text {
+                        text: parent.text
+                        color: "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    
+                    onClicked: settingsDialog.visible = false
+                }
+            }
+        }
+    }
+} 
